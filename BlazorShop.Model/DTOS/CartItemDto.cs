@@ -12,7 +12,7 @@
         public string? ProductDescription { get; set; }
         public string? ProductImageUrl { get; set; }
         public decimal? Price { get; set; }
-        public string? TotalPrice { get; set; }
+        public decimal? TotalPrice { get; set; }
 
 
 

@@ -1,6 +1,7 @@
 ﻿using BlazorShop.Api.AppContext;
 using BlazorShop.Api.Entities;
 using BlazorShop.Api.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 
 namespace BlazorShop.Api.Repository
@@ -16,19 +17,28 @@ namespace BlazorShop.Api.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<Product>> GetCartItems()
+        public async Task<Product> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products
+                        .Include(c => c.Category)
+                        .SingleOrDefaultAsync(c => c.Id == id);
+            return product;
+        }
+        public async Task<IEnumerable<Product>> GetCartItems()
+        {
+            var productList = await _context.Products
+                       .Include(c => c.Category)
+                       .ToListAsync();
+            return productList;
         }
 
-        public Task<IEnumerable<Product>> GetProductByCategory(int id)
+        public async Task<IEnumerable<Product>> GetProductByCategory(int id)
         {
-            throw new NotImplementedException();
+           var productCategory = await _context.Products
+                       .Include(c => c.Category)
+                       .Where(p => p.CategoryId == id).ToListAsync();
+            return productCategory;
         }
 
-        public Task<Product> GetProductById(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
