@@ -21,11 +21,11 @@ namespace BlazorShop.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetCartItems()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllItems()
         {
             try
             {
-                var products = await _productRepository.GetCartItems();
+                var products = await _productRepository.GetAllItems();
                 if (products is null)
                 {
                     return NotFound();

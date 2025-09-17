@@ -24,7 +24,7 @@ namespace BlazorShop.Api.Repository
                         .SingleOrDefaultAsync(c => c.Id == id);
             return product;
         }
-        public async Task<IEnumerable<Product>> GetCartItems()
+        public async Task<IEnumerable<Product>> GetAllItems()
         {
             var productList = await _context.Products
                        .Include(c => c.Category)
