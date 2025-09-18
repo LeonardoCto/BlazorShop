@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorShop.Api.Controllers
 {
+    //TODO
+    //Here will be in this "wrong" way to construct a controller because we are not using and architecture like MVC or DDD
+    //so gonna have validations and lines of code that do not work in big systems
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
