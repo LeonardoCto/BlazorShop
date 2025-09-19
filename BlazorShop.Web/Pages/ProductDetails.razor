@@ -1,4 +1,5 @@
 @page "/ProductDetails/{Id:int}"
+@using BlazorShop.Web.Services.Carts
 
 @if(Product is null && ErrorMessage is null)
 {
@@ -25,7 +26,12 @@ else
                 </b>
             </p>
             <div>
-                <button class="btn btn-success">
+                <button class="btn btn-success"
+                @onclick="() => AddToCart_Click(new CartItemAddDto{
+                    CartId =LogedUser.CartId,
+                    ProductId = Product.Id,
+                    Quantity = 1
+                })">
                    Add to Cart
                 </button>
             </div>
@@ -37,6 +43,9 @@ else
 {
     [Inject]
     public IProductService? ProductService {get; set;}
+
+    [Inject]
+    public ICartService? CartService {get;set;}
 
     [Parameter]
     public int Id {get; set;}
@@ -55,6 +64,18 @@ else
         catch(Exception ex)
         {
             ErrorMessage = ex.Message;
+        }
+    }
+
+    protected async Task AddToCart_Click(CartItemAddDto cartItemAddDto)
+    {
+        try
+        {
+            var cartItemDto = await CartService.AddItem(cartItemAddDto);
+        }
+        catch(Exception)
+        {
+            throw;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorShop.Api.IRepository;
+using BlazorShop.Api.IRepository.Carts;
 using BlazorShop.Api.Mappings;
 using BlazorShop.Api.Repository;
 using BlazorShop.Api.Repository.Carts;
@@ -16,11 +18,11 @@ namespace BlazorShop.Api.Controllers
     public class CartController : Controller
 
     {
-        private readonly CartRepository _cartRepository;
-        private readonly ProductRepository _productRepository;
+        private readonly ICartRepository _cartRepository;
+        private readonly IProductRepository _productRepository;
         private readonly ILogger<CartController> _logger;
 
-        public CartController(ILogger<CartController> logger, CartRepository cartRepository, ProductRepository productRepository)
+        public CartController(ILogger<CartController> logger, ICartRepository cartRepository, IProductRepository productRepository)
         {
             _logger = logger;
             _cartRepository = cartRepository;

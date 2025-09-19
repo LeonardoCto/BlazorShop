@@ -1,6 +1,8 @@
 using BlazorShop.Api.AppContext;
 using BlazorShop.Api.IRepository;
+using BlazorShop.Api.IRepository.Carts;
 using BlazorShop.Api.Repository;
+using BlazorShop.Api.Repository.Carts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //Instance of repository to be used in controller
 //Here is write "All the time that I reference the Interface you give me an instance of the factual class"
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddCors();
 
 var app = builder.Build();
