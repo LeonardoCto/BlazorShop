@@ -85,7 +85,7 @@ namespace BlazorShop.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<CartItemDto>> AddItem([FromBody] CartItemAddDto cartItemAddDto)
         {
@@ -95,7 +95,7 @@ namespace BlazorShop.Api.Controllers
 
                 if (newCartItem == null)
                 {
-                    return NoContent(); 
+                    return NoContent();
                 }
 
                 var product = await _productRepository.GetProductById(newCartItem.ProductId);
@@ -116,5 +116,30 @@ namespace BlazorShop.Api.Controllers
             }
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<CartItemDto>> DeleteItem(int id)
+        {
+            try
+            {
+                var cartItem = await _cartRepository.DeleteItem(id);
+                if (cartItem == null)
+                {
+                    return NotFound($"Item not found");
+                }
+
+                var product = await _productRepository.GetProductById(cartItem.ProductId);
+                if (product == null)
+                {
+                    return NotFound($"Item do not exist in DB");
+                }
+
+                var cartItemDto = cartItem.ConvertCartItemToDto(product);
+                return Ok(cartItemDto);
+            }
+            catch (Exception ex)
+            {
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

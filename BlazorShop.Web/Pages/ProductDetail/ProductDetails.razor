@@ -27,7 +27,7 @@ else
             </p>
             <div>
                 <button class="btn btn-success"
-                @onclick="() => AddToCart_Click(new CartItemAddDto{
+                @onclick="() => AddToCart_Click( new CartItemAddDto {
                     CartId =LogedUser.CartId,
                     ProductId = Product.Id,
                     Quantity = 1
@@ -46,6 +46,9 @@ else
 
     [Inject]
     public ICartService? CartService {get;set;}
+    
+    [Inject]
+    public NavigationManager? NavigationManager {get;set;}
 
     [Parameter]
     public int Id {get; set;}
@@ -72,6 +75,7 @@ else
         try
         {
             var cartItemDto = await CartService.AddItem(cartItemAddDto);
+            NavigationManager.NavigateTo("/Cart");
         }
         catch(Exception)
         {

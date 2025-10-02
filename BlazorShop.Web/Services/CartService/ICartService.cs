@@ -11,6 +11,7 @@ namespace BlazorShop.Web.Services.Carts
 
         Task<List<CartItemDto>> GetUserItems(int userId);
         Task<CartItemDto> AddItem(CartItemAddDto cartItemAddDto);
+        Task<CartItemDto> DeleteItem(int id);
 
 
         

@@ -1,0 +1,96 @@
+@page "/Cart"
+@using System.Runtime.InteropServices
+@using BlazorShop.Web.Services.Carts
+
+@if(CartItems is null && ErrorMessage is null)
+{
+   <ShowSpinner/>
+}
+else if(ErrorMessage is not null )
+{
+    <ShowError ErrorMessage="@ErrorMessage"></ShowError>
+}
+
+else
+{
+    <h3 class="mb-5">Cart</h3>
+
+    @if(CartItems.Count() > 0)
+    {
+        <div class="row mb-5">
+            <div class="col-md-9">
+                @foreach (var item in CartItems)
+            {   
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <img src="@item.ProductImageUrl" width="250" class="img-thumbnail">
+                    </div>
+                    <div class="col-md-9">
+                        <h5>@item.ProductName</h5>
+                        <div class="mb-4">
+                            @item.ProductDescription
+                    </div>
+                        <span>Preço: <b>@item.Price.ToString()</b></span>
+                        <br />
+                    <div>
+                        <button @onclick="(()=> DeleteCartItem_Click(item.Id))" class="btn btn-danger sm">Remove</button>
+                    </div>
+                </div>
+            </div>   
+            }  
+        </div>
+        <div class="col-md-3">
+            <h5> Cart Resume</h5>
+            <div class="mt-2">
+                <div>Total - </div>
+                <a href="#" class="btn btn-success">
+                    <span class="oi oi-credit-card"></span>&nbsp; Payment
+                </a>
+            </div>
+        </div>
+        </div>
+        
+    }
+    else
+    {
+        <div>
+            <h3>
+                <b>Your cart is empty!</b>
+            </h3>
+        </div>
+    }
+
+}
+@code{
+    [Inject]
+    public ICartService CartService { get; set; }
+    public List<CartItemDto> CartItems { get; set; }
+    public string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            CartItems = await CartService.GetUserItems(LogedUser.UserId);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
+    protected async Task DeleteCartItem_Click(int id)
+    {
+        var cartItemDto = await CartService.DeleteItem(id);
+        await RemoveCartItem(id);
+    }
+
+    private CartItemDto GetCartItem(int id)
+    {
+        return CartItems.FirstOrDefault(c => c.Id == id);
+    }
+    private async Task RemoveCartItem(int id)
+    {
+        var cartItemDto = GetCartItem(id);
+        CartItems.Remove(cartItemDto);
+    }
+}

@@ -47,6 +47,23 @@ namespace BlazorShop.Web.Services.Carts
             }
         }
 
+        public async Task<CartItemDto> DeleteItem(int id)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/Cart/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<CartItemDto>();
+                }
+                return default(CartItemDto);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<CartItemDto>> GetUserItems(int userId)
         {
             try

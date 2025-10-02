@@ -43,12 +43,18 @@ namespace BlazorShop.Api.Repository.Carts
             return null;
         }
 
-        public Task<CartItem> DeleteItem(int id)
+        public async Task<CartItem> DeleteItem(int id)
         {
-            throw new NotImplementedException();
+            var item = await _context.CartItems.FindAsync(id);
+            if (item != null)
+            {
+                _context.CartItems.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+                return item;
         }
 
-        public async Task<CartItem> GetItem(int id)
+        public async Task<CartItem?> GetItem(int id)
         {
             return await (from cart in _context.Carts
                           join cartItem in _context.CartItems
